@@ -36,23 +36,20 @@ def aks_draft_app_init(destination: str,
 
 def aks_draft_app_up(app: str,
                      subscription_id: str,
-                     resource_group_name: str,
+                     resource_group: str,
                      provider: str,
                      gh_repo: str,
                      cluster_name: str,
                      registry_name: str,
-                     container_name: str,
-                     resource_group: str,
-                     destination: str) -> None:
+                     container_name: str) -> None:
     file_path = _binary_pre_check()
     if not file_path:
         raise ValueError('Binary check was NOT executed successfully')
 
     setup_gh_args, generate_workflow_args = _build_up_arguments(app, subscription_id,
-                                                                resource_group_name, provider,
+                                                                resource_group, provider,
                                                                 gh_repo, cluster_name,
-                                                                registry_name, container_name,
-                                                                resource_group, destination)
+                                                                registry_name, container_name)
     run_successful = _run_up(file_path, setup_gh_args, generate_workflow_args)
     if run_successful:
         _up_finish()
@@ -235,18 +232,16 @@ def _init_finish():
 # Returns 2 lists of arguments following the format `--arg=value`
 def _build_up_arguments(app: str,
                         subscription_id: str,
-                        resource_group_name: str,
+                        resource_group: str,
                         provider: str,
                         gh_repo: str,
                         cluster_name: str,
                         registry_name: str,
-                        container_name: str,
-                        resource_group: str,
-                        destination: str) -> List[List[str]]:
+                        container_name: str) -> List[List[str]]:
     setup_gh_options = {
         'app': app,
         'subscription-id': subscription_id,
-        'resource-group-name': resource_group_name,
+        'resource-group-name': resource_group,
         'provider': provider,
         'gh-repo': gh_repo
     }
@@ -255,7 +250,7 @@ def _build_up_arguments(app: str,
         'registry-name': registry_name,
         'container-name': container_name,
         'resource-group': resource_group,
-        'destination': destination
+        'destination': gh_repo
     }
     all_options = [setup_gh_options, generate_workflow_options]
     all_args = []
