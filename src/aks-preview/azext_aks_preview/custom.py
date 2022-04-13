@@ -151,6 +151,7 @@ from .vendored_sdks.azure_mgmt_preview_aks.v2022_02_02_preview.models import (
 
 from .aks_app_commands.aksappcommands import (
     aks_draft_app_init
+    aks_draft_app_up
 )
 
 logger = get_logger(__name__)
@@ -2825,6 +2826,19 @@ def aks_app_init(destination='.',
                  deployment_only=None):
     aks_draft_app_init(destination, app_name, language, create_config, dockerfile_only, deployment_only)
 
+def aks_app_up(app=None,
+               subscription_id=None,
+               resource_group_name=None,
+               provider=None,
+               gh_repo=None,
+               cluster_name=None,
+               registry_name=None,
+               container_name=None,
+               resource_group=None,
+               destination=None):
+    aks_draft_app_up(app, subscription_id, resource_group_name, provider,
+                     gh_repo, cluster_name, registry_name, container_name,
+                     resource_group, destination)
 
 def aks_pod_identity_add(cmd, client, resource_group_name, cluster_name,
                          identity_name, identity_namespace, identity_resource_id,

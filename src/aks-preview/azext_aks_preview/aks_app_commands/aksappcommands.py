@@ -5,8 +5,9 @@
 # --------------------------------------------------------------------------------------------
 
 import json
+import resource
 import sre_parse
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import shutil
 import subprocess
 import requests
@@ -33,6 +34,31 @@ def aks_draft_app_init(destination: str,
         _init_finish()
     else:
         raise ValueError('`az aks app init` was NOT executed successfully')
+
+def aks_draft_app_up(app: str,
+                     subscription_id: str,
+                     resource_group_name: str,
+                     provider: str,
+                     gh_repo: str,
+                     cluster_name: str,
+                     registry_name: str,
+                     container_name: str,
+                     resource_group: str,
+                     destination: str) -> None:
+    file_path = _binary_pre_check()
+    if not file_path:
+        raise ValueError('Binary check was NOT executed successfully')
+
+    setup_gh_args, generate_workflow_args = _build_up_arguments(app, subscription_id,
+                                                                resource_group_name, provider,
+                                                                gh_repo, cluster_name,
+                                                                registry_name, container_name,
+                                                                resource_group, destination)
+    run_successful = _run_up(file_path, setup_gh_args, generate_workflow_args)
+    if run_successful:
+        _up_finish()
+    else:
+        raise ValueError('`az aks app up` was NOT executed successfully')
 
 
 # Returns the path to Draft binary. None if missing the required binary
@@ -205,3 +231,60 @@ def _run_init(binary_path: str, arguments: List[str]) -> bool:
 def _init_finish():
     # Clean up logic can go here if needed
     print('Finishing running `az aks app init`')
+
+
+# Returns 2 lists of arguments following the format `--arg=value`
+def _build_up_arguments(app: str,
+                        subscription_id: str,
+                        resource_group_name: str,
+                        provider: str,
+                        gh_repo: str,
+                        cluster_name: str,
+                        registry_name: str,
+                        container_name: str,
+                        resource_group: str,
+                        destination: str) -> Tuple[List[str], List[str]]:
+    setup_gh_options = {
+        'app': app,
+        'subscription-id': subscription_id,
+        'resource-group-name': resource_group_name,
+        'provider': provider,
+        'gh-repo': gh_repo
+    }
+    generate_workflow_options = {
+        'cluster-name': cluster_name,
+        'registry-name': registry_name,
+        'container-name': container_name,
+        'resource-group': resource_group,
+        'destination': destination
+    }
+    all_options = [setup_gh_options, generate_workflow_options]
+    all_args = []
+    for options in all_options:
+        all_args.append(_build_args(options))
+    return tuple(all_args)
+
+
+# Executes the `draft setup-gh` command and the `draft generate-workflow` command
+# Returns True if the process executed sucessfully, False otherwise
+def _run_up(binary_path: str, setup_gh_args: List[str], generate_workflow_args: List[str]) -> bool:
+    if binary_path is None:
+        raise ValueError('The given binary path was null or empty')
+
+    print('Running Draft Binary ...')
+    cmd = [binary_path, 'setup-gh'] + setup_gh_args
+    process = subprocess.Popen(cmd)
+    exit_code = process.wait()
+    if exit_code != 0:
+        return False
+
+    cmd = [binary_path, 'generate-workflow'] + generate_workflow_args
+    process = subprocess.Popen(cmd)
+    exit_code = process.wait()
+    return exit_code == 0
+
+
+# Function for clean up logic
+def _up_finish():
+    # Clean up logic can go here if needed
+    print('Finishing running `az aks app up`')
