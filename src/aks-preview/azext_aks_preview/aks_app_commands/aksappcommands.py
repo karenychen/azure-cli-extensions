@@ -5,7 +5,6 @@
 # --------------------------------------------------------------------------------------------
 
 import json
-import resource
 import sre_parse
 from typing import Dict, List, Optional, Tuple
 import shutil
@@ -243,7 +242,7 @@ def _build_up_arguments(app: str,
                         registry_name: str,
                         container_name: str,
                         resource_group: str,
-                        destination: str) -> Tuple[List[str], List[str]]:
+                        destination: str) -> List[List[str]]:
     setup_gh_options = {
         'app': app,
         'subscription-id': subscription_id,
@@ -262,7 +261,7 @@ def _build_up_arguments(app: str,
     all_args = []
     for options in all_options:
         all_args.append(_build_args(options))
-    return tuple(all_args)
+    return all_args
 
 
 # Executes the `draft setup-gh` command and the `draft generate-workflow` command
