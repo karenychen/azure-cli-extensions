@@ -1653,10 +1653,56 @@ helps['aks draft create'] = """
           short-summary: Only generate deployment files (helm, kustomize, manifests) for the Kubernetes deployment.
 """
 
-helps['aks app up'] = """
+helps['aks draft setup-gh'] = """
+    type: command
+    short-summary: Set up Github OIDC for your application
+    parameters:
+        - name: --app
+          type: string
+          short-summary: Specify the name of the application.
+        - name: --subscription-id
+          type: string
+          short-summary: Specify the Azure subscription ID.
+        - name: --resource-group
+          type: string
+          short-summary: Specify the name of the Azure resource group.
+        - name: --provider
+          type: string
+          short-summary: Specify the cloud provider (default is azure).
+        - name: --gh-repo
+          type: string
+          short-summary: Specify the url to the github repository.
+"""
+
+helps['aks draft generate-workflow'] = """
+    type: command
+    short-summary: Deploy your application on AKS.
+    long-summary: Before running this command, Make sure you have set up Github OIDC for your application. 
+                  You also need to create a resource group, a container registry and a Kubernetes cluster on Azure and
+                  link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`
+    parameters:
+        - name: --resource-group
+          type: string
+          short-summary: Specify the name of the Azure resource group.
+        - name: --gh-repo
+          type: string
+          short-summary: Specify the url to the github repository.
+        - name: --cluster-name
+          type: string
+          short-summary: Specify the AKS cluster name.
+        - name: --registry-name
+          type: string
+          short-summary: Specify the path to the project directory.
+        - name: --container-name
+          type: string
+          short-summary: Specify the name of the container image.
+"""
+
+helps['aks draft up'] = """
     type: command
     short-summary: Set up Github OIDC and deploy your application on AKS.
-    long-summary: Before running this command, setup a resource group, a container registry and a Kubernetes cluster on Azure and
+    long-summary: This command combines `az aks draft setup-gh` and `az aks draft generate-workflow`.
+                  Before running this command, create a resource group, a container registry and a Kubernetes cluster on Azure and
                   link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`
     parameters:
         - name: --app
