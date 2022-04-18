@@ -2840,9 +2840,9 @@ def aks_draft_generate_workflow(cluster_name=None,
                                 registry_name=None,
                                 container_name=None,
                                 resource_group=None,
-                                gh_repo=None):
+                                destination=None):
     aks_draft_cmd_generate_workflow(cluster_name, registry_name, container_name,
-                                    resource_group, gh_repo)
+                                    resource_group, destination)
 
 def aks_draft_up(app=None,
                  subscription_id=None,
@@ -2851,9 +2851,10 @@ def aks_draft_up(app=None,
                  gh_repo=None,
                  cluster_name=None,
                  registry_name=None,
-                 container_name=None):
+                 container_name=None,
+                 destination=None):
     aks_draft_cmd_up(app, subscription_id, resource_group, provider,
-                     gh_repo, cluster_name, registry_name, container_name)
+                     gh_repo, cluster_name, registry_name, container_name, destination)
 
 def aks_pod_identity_add(cmd, client, resource_group_name, cluster_name,
                          identity_name, identity_namespace, identity_resource_id,

@@ -1635,7 +1635,7 @@ helps['aks draft create'] = """
     parameters:
         - name: --destination
           type: string
-          short-summary: Specify the path to the project directory.
+          short-summary: Specify the path to the project directory (default is .).
         - name: --app-name
           type: string
           short-summary: Specify the name of the helm release.
@@ -1684,9 +1684,9 @@ helps['aks draft generate-workflow'] = """
         - name: --resource-group
           type: string
           short-summary: Specify the name of the Azure resource group.
-        - name: --gh-repo
+        - name: --destination
           type: string
-          short-summary: Specify the url to the github repository.
+          short-summary: Specify the path to the project directory (default is .).
         - name: --cluster-name
           type: string
           short-summary: Specify the AKS cluster name.
@@ -1729,4 +1729,7 @@ helps['aks draft up'] = """
         - name: --container-name
           type: string
           short-summary: Specify the name of the container image.
+        - name: --destination
+          type: string
+          short-summary: Specify the path to the project directory (default is .).
 """

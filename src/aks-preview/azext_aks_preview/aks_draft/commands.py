@@ -43,7 +43,7 @@ def aks_draft_cmd_setup_gh(app: str,
                            gh_repo: str) -> None:
     file_path, arguments = _pre_run(app=app,
                                     subscription_id=subscription_id,
-                                    resource_group=resource_group,
+                                    resource_group_name=resource_group,
                                     provider=provider,
                                     gh_repo=gh_repo)
     run_successful = _run(file_path, 'setup-gh', arguments)
@@ -58,12 +58,12 @@ def aks_draft_cmd_generate_workflow(cluster_name: str,
                                     registry_name: str,
                                     container_name: str,
                                     resource_group: str,
-                                    gh_repo: str) -> None:
+                                    destination: str) -> None:
     file_path, arguments = _pre_run(cluster_name=cluster_name,
                                     registry_name=registry_name,
                                     container_name=container_name,
                                     resource_group=resource_group,
-                                    gh_repo=gh_repo)
+                                    destination=destination)
     run_successful = _run(file_path, 'generate-workflow', arguments)
     if run_successful:
         _run_finish()
@@ -79,14 +79,15 @@ def aks_draft_cmd_up(app: str,
                      gh_repo: str,
                      cluster_name: str,
                      registry_name: str,
-                     container_name: str) -> None:
+                     container_name: str,
+                     destination: str) -> None:
     file_path = _binary_pre_check()
     if not file_path:
         raise ValueError('Binary check was NOT executed successfully')
 
     setup_gh_args = _build_args(app=app,
                                 subscription_id=subscription_id,
-                                resource_group=resource_group,
+                                resource_group_name=resource_group,
                                 provider=provider,
                                 gh_repo=gh_repo)
 
@@ -98,7 +99,7 @@ def aks_draft_cmd_up(app: str,
                                          registry_name=registry_name,
                                          container_name=container_name,
                                          resource_group=resource_group,
-                                         gh_repo=gh_repo)
+                                         destination=destination)
     run_successful = _run(file_path, 'generate-workflow', generate_workflow_args)
     if run_successful:
         _run_finish()
@@ -134,12 +135,11 @@ def _run_finish():
     logging.info('Finished running Draft command')
 
 
-# Returns a list of arguments following the format `--arg=value`
 def _build_args(args_dict: Dict[str, str]=None, **kwargs) -> List[str]: 
     if not args_dict:
         args_dict = kwargs
     args_list = []
-    for key, val in kwargs.items():
+    for key, val in args_dict.items():
         arg = key.replace('_', '-')
         if val:
             args_list.append(f'--{arg}={val}')
