@@ -151,7 +151,9 @@ from .vendored_sdks.azure_mgmt_preview_aks.v2022_02_02_preview.models import (
 
 from .aks_draft.commands import (
     aks_draft_cmd_create,
-    aks_draft_app_up
+    aks_draft_cmd_setup_gh,
+    aks_draft_cmd_generate_workflow,
+    aks_draft_cmd_up,
 )
 
 logger = get_logger(__name__)
@@ -2826,15 +2828,31 @@ def aks_draft_create(destination='.',
                  deployment_only=None):
     aks_draft_cmd_create(destination, app_name, language, create_config, dockerfile_only, deployment_only)
 
-def aks_app_up(app=None,
-               subscription_id=None,
-               resource_group=None,
-               provider=None,
-               gh_repo=None,
-               cluster_name=None,
-               registry_name=None,
-               container_name=None):
-    aks_draft_app_up(app, subscription_id, resource_group, provider,
+
+def aks_draft_setup_gh(app=None,
+                       subscription_id=None,
+                       resource_group=None,
+                       provider=None,
+                       gh_repo=None):
+    aks_draft_cmd_setup_gh(app, subscription_id, resource_group, provider, gh_repo)
+
+def aks_draft_generate_workflow(cluster_name=None,
+                                registry_name=None,
+                                container_name=None,
+                                resource_group=None,
+                                gh_repo=None):
+    aks_draft_cmd_generate_workflow(cluster_name, registry_name, container_name,
+                                    resource_group, gh_repo)
+
+def aks_draft_up(app=None,
+                 subscription_id=None,
+                 resource_group=None,
+                 provider=None,
+                 gh_repo=None,
+                 cluster_name=None,
+                 registry_name=None,
+                 container_name=None):
+    aks_draft_cmd_up(app, subscription_id, resource_group, provider,
                      gh_repo, cluster_name, registry_name, container_name)
 
 def aks_pod_identity_add(cmd, client, resource_group_name, cluster_name,

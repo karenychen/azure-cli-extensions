@@ -125,7 +125,9 @@ def load_command_table(self, _):
     # AKS draft commands
     with self.command_group('aks draft', managed_clusters_sdk, client_factory=cf_managed_clusters) as g:
         g.custom_command('create', 'aks_draft_create')
-        g.custom_command('up', 'aks_app_up')
+        g.custom_command('setup-gh', 'aks_draft_setup_gh')
+        g.custom_command('generate-workflow', 'aks_draft_generate_workflow')
+        g.custom_command('up', 'aks_draft_up')
 
     # AKS pod identity commands
     with self.command_group('aks pod-identity', managed_clusters_sdk, client_factory=cf_managed_clusters) as g:
