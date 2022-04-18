@@ -38,6 +38,21 @@ def aks_draft_cmd_create(destination: str,
     else:
         raise ValueError('`az aks draft create` was NOT executed successfully')
 
+
+def aks_draft_cmd_setup_gh(app: str,
+                          subscription_id: str,
+                          resource_group: str,
+                          provider: str,
+                          gh_repo: str) -> None:
+    pass
+
+def aks_drfaft_cmd_generate_workflow(cluster_name: str,
+                                     registry_name: str,
+                                     container_name: str,
+                                     resource_group: str,
+                                     gh_repo: str) -> None:
+    pass
+
 # `az aks draft up` function
 def aks_draft_cmd_up(app: str,
                      subscription_id: str,
