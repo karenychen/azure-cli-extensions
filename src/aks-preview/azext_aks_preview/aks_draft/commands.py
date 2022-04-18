@@ -30,24 +30,46 @@ def aks_draft_cmd_create(destination: str,
                                     deployment_only=deployment_only)
     run_successful = _run(file_path, 'create', arguments)
     if run_successful:
-        _create_finish()
+        _run_finish()
     else:
         raise ValueError('`az aks draft create` was NOT executed successfully')
 
 
+# `az aks draft setup-gh` function
 def aks_draft_cmd_setup_gh(app: str,
-                          subscription_id: str,
-                          resource_group: str,
-                          provider: str,
-                          gh_repo: str) -> None:
-    pass
+                           subscription_id: str,
+                           resource_group: str,
+                           provider: str,
+                           gh_repo: str) -> None:
+    file_path, arguments = _pre_run(app=app,
+                                    subscription_id=subscription_id,
+                                    resource_group=resource_group,
+                                    provider=provider,
+                                    gh_repo=gh_repo)
+    run_successful = _run(file_path, 'setup-gh', arguments)
+    if run_successful:
+        _run_finish()
+    else:
+        raise ValueError('`az aks draft setup-gh` was NOT executed successfully')
 
+
+# `az aks draft generate-workflow` function
 def aks_draft_cmd_generate_workflow(cluster_name: str,
-                                     registry_name: str,
-                                     container_name: str,
-                                     resource_group: str,
-                                     gh_repo: str) -> None:
-    pass
+                                    registry_name: str,
+                                    container_name: str,
+                                    resource_group: str,
+                                    gh_repo: str) -> None:
+    file_path, arguments = _pre_run(cluster_name=cluster_name,
+                                    registry_name=registry_name,
+                                    container_name=container_name,
+                                    resource_group=resource_group,
+                                    gh_repo=gh_repo)
+    run_successful = _run(file_path, 'generate-workflow', arguments)
+    if run_successful:
+        _run_finish()
+    else:
+        raise ValueError('`az aks draft generate-workflow` was NOT executed successfully')
+
 
 # `az aks draft up` function
 def aks_draft_cmd_up(app: str,
@@ -62,15 +84,26 @@ def aks_draft_cmd_up(app: str,
     if not file_path:
         raise ValueError('Binary check was NOT executed successfully')
 
-    setup_gh_args, generate_workflow_args = _build_up_arguments(app, subscription_id,
-                                                                resource_group, provider,
-                                                                gh_repo, cluster_name,
-                                                                registry_name, container_name)
-    run_successful = _run_up(file_path, setup_gh_args, generate_workflow_args)
+    setup_gh_args = _build_args(app=app,
+                                subscription_id=subscription_id,
+                                resource_group=resource_group,
+                                provider=provider,
+                                gh_repo=gh_repo)
+
+    run_successful = _run(file_path, 'setup-gh', setup_gh_args)
+    if not run_successful:
+        raise ValueError('`az aks draft setup-gh` was NOT executed successfully')
+
+    generate_workflow_args = _build_args(cluster_name=cluster_name,
+                                         registry_name=registry_name,
+                                         container_name=container_name,
+                                         resource_group=resource_group,
+                                         gh_repo=gh_repo)
+    run_successful = _run(file_path, 'generate-workflow', generate_workflow_args)
     if run_successful:
-        _up_finish()
+        _run_finish()
     else:
-        raise ValueError('`az aks app up` was NOT executed successfully')
+        raise ValueError('`az aks draft generate-workflow` was NOT executed successfully')
 
 
 # Returns binary file path and arguments 
@@ -93,6 +126,24 @@ def _run(binary_path: str, command: str, arguments: List[str]) -> bool:
     process = subprocess.Popen(cmd)
     exit_code = process.wait()
     return exit_code == 0
+
+
+# Function for clean up logic
+def _run_finish():
+    # Clean up logic can go here if needed
+    logging.info('Finished running Draft command')
+
+
+# Returns a list of arguments following the format `--arg=value`
+def _build_args(args_dict: Dict[str, str]=None, **kwargs) -> List[str]: 
+    if not args_dict:
+        args_dict = kwargs
+    args_list = []
+    for key, val in kwargs.items():
+        arg = key.replace('_', '-')
+        if val:
+            args_list.append(f'--{arg}={val}')
+    return args_list
 
 
 # Returns the path to Draft binary. None if missing the required binary
@@ -219,74 +270,3 @@ def _download_binary() -> Optional[str]:
 
     logging.error(f'Download of Draft binary was unsuccessful with a status code: {response.status_code}')
     return None
-
-
-# Returns a list of arguments following the format `--arg=value`
-def _build_args(kwargs: Dict[str, str]) -> List[str]:
-    args_list = []
-    for key, val in kwargs.items():
-        arg = key.replace('_', '-')
-        if val:
-            args_list.append(f'--{arg}={val}')
-    return args_list
-
-
-# Function for clean up logic
-def _create_finish():
-    # Clean up logic can go here if needed
-    logging.info('Finishing running `az aks draft create`')
-
-
-# Returns 2 lists of arguments following the format `--arg=value`
-def _build_up_arguments(app: str,
-                        subscription_id: str,
-                        resource_group: str,
-                        provider: str,
-                        gh_repo: str,
-                        cluster_name: str,
-                        registry_name: str,
-                        container_name: str) -> List[List[str]]:
-    setup_gh_options = {
-        'app': app,
-        'subscription-id': subscription_id,
-        'resource-group-name': resource_group,
-        'provider': provider,
-        'gh-repo': gh_repo
-    }
-    generate_workflow_options = {
-        'cluster-name': cluster_name,
-        'registry-name': registry_name,
-        'container-name': container_name,
-        'resource-group': resource_group,
-        'destination': gh_repo
-    }
-    all_options = [setup_gh_options, generate_workflow_options]
-    all_args = []
-    for options in all_options:
-        all_args.append(_build_args(options))
-    return all_args
-
-
-# Executes the `draft setup-gh` command and the `draft generate-workflow` command
-# Returns True if the process executed sucessfully, False otherwise
-def _run_up(binary_path: str, setup_gh_args: List[str], generate_workflow_args: List[str]) -> bool:
-    if binary_path is None:
-        raise ValueError('The given binary path was null or empty')
-
-    logging.info('Running Draft Binary ...')
-    cmd = [binary_path, 'setup-gh'] + setup_gh_args
-    process = subprocess.Popen(cmd)
-    exit_code = process.wait()
-    if exit_code != 0:
-        return False
-
-    cmd = [binary_path, 'generate-workflow'] + generate_workflow_args
-    process = subprocess.Popen(cmd)
-    exit_code = process.wait()
-    return exit_code == 0
-
-
-# Function for clean up logic
-def _up_finish():
-    # Clean up logic can go here if needed
-    logging.info('Finishing running `az aks app up`')
