@@ -2833,7 +2833,7 @@ def aks_app_up(app=None,
                gh_repo=None,
                cluster_name=None,
                registry_name=None,
-               container_name=None,):
+               container_name=None):
     aks_draft_app_up(app, subscription_id, resource_group, provider,
                      gh_repo, cluster_name, registry_name, container_name)
 
