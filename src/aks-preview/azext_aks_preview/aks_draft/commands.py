@@ -250,6 +250,8 @@ def _get_potential_paths() -> List[str]:
 def _download_binary() -> Optional[str]:
     logging.info('Attempting to download dependency...')
 
+    original_dir = os.getcwd()
+
     filename = _get_filename()
     if not filename:
         return None
@@ -276,6 +278,8 @@ def _download_binary() -> Optional[str]:
             output_file.write(response.content)
         logging.info(f'Download of Draft binary was successful with a status code: {response.status_code}')
         os.chmod(binary_path + '/' + filename, 0o755)
+        # set current directory to original
+        os.chdir(original_dir)
         return binary_path + '/' + filename
 
     logging.error(f'Download of Draft binary was unsuccessful with a status code: {response.status_code}')
