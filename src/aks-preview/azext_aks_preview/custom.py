@@ -154,6 +154,7 @@ from .aks_draft.commands import (
     aks_draft_cmd_setup_gh,
     aks_draft_cmd_generate_workflow,
     aks_draft_cmd_up,
+    aks_draft_cmd_update
 )
 
 logger = get_logger(__name__)
@@ -2836,6 +2837,7 @@ def aks_draft_setup_gh(app=None,
                        gh_repo=None):
     aks_draft_cmd_setup_gh(app, subscription_id, resource_group, provider, gh_repo)
 
+
 def aks_draft_generate_workflow(cluster_name=None,
                                 registry_name=None,
                                 container_name=None,
@@ -2843,6 +2845,7 @@ def aks_draft_generate_workflow(cluster_name=None,
                                 destination=None):
     aks_draft_cmd_generate_workflow(cluster_name, registry_name, container_name,
                                     resource_group, destination)
+
 
 def aks_draft_up(app=None,
                  subscription_id=None,
@@ -2855,6 +2858,11 @@ def aks_draft_up(app=None,
                  destination=None):
     aks_draft_cmd_up(app, subscription_id, resource_group, provider,
                      gh_repo, cluster_name, registry_name, container_name, destination)
+
+
+def aks_draft_update(host=None, cert=None):
+    aks_draft_cmd_update(host, cert)
+
 
 def aks_pod_identity_add(cmd, client, resource_group_name, cluster_name,
                          identity_name, identity_namespace, identity_resource_id,

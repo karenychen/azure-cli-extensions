@@ -107,6 +107,16 @@ def aks_draft_cmd_up(app: str,
         raise ValueError('`az aks draft generate-workflow` was NOT executed successfully')
 
 
+# `az aks draft update` function
+def aks_draft_cmd_update(host: str, cert: str) -> None:
+    file_path, arguments = _pre_run(host=host, cert=cert)
+    run_successful = _run(file_path, 'update', arguments)
+    if run_successful:
+        _run_finish()
+    else:
+        raise ValueError('`az aks draft update` was NOT executed successfully')
+
+
 # Returns binary file path and arguments 
 def _pre_run(**kwargs) -> Tuple[str, List[str]]:
     file_path = _binary_pre_check()

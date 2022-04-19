@@ -1646,10 +1646,10 @@ helps['aks draft create'] = """
           type: string
           short-summary: Specify the path to the configuration file.
         - name: --dockerfile-only
-          type: string
+          type: bool
           short-summary: Only generate Dockerfile for the Kubernetes deployment.
         - name: --deployment-only
-          type: string
+          type: bool
           short-summary: Only generate deployment files (helm, kustomize, manifests) for the Kubernetes deployment.
 """
 
@@ -1679,7 +1679,7 @@ helps['aks draft generate-workflow'] = """
     short-summary: Deploy your application on AKS.
     long-summary: Before running this command, Make sure you have set up Github OIDC for your application. 
                   You also need to create a resource group, a container registry and a Kubernetes cluster on Azure and
-                  link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`
+                  link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`.
     parameters:
         - name: --resource-group
           type: string
@@ -1703,7 +1703,7 @@ helps['aks draft up'] = """
     short-summary: Set up Github OIDC and deploy your application on AKS.
     long-summary: This command combines `az aks draft setup-gh` and `az aks draft generate-workflow`.
                   Before running this command, create a resource group, a container registry and a Kubernetes cluster on Azure and
-                  link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`
+                  link the three resources using `az aks update -n <cluster-name> -g <resource-group-name> --attach-acr <acr-name>`.
     parameters:
         - name: --app
           type: string
@@ -1732,4 +1732,18 @@ helps['aks draft up'] = """
         - name: --destination
           type: string
           short-summary: Specify the path to the project directory (default is .).
+"""
+
+helps['aks draft update'] = """
+    type: command
+    short-summary: Update your application to be internet accessible.
+    long-summary: This command automatically updates your yaml files as necessary so that your
+                  application will be able to receive external requests.
+    parameters:
+        - name: --host
+          type: string
+          short-summary: Specify the host of the ingress resource.
+        - name: --cert
+          type: string
+          short-summary: Specify the URI of the Keyvault certificate to present.
 """
