@@ -1743,7 +1743,10 @@ helps['aks draft update'] = """
         - name: --host
           type: string
           short-summary: Specify the host of the ingress resource.
-        - name: --cert
+        - name: --certificate
           type: string
           short-summary: Specify the URI of the Keyvault certificate to present.
+        - name: --destination
+          type: string
+          short-summary: Specify the path to the project directory (default is .).
 """

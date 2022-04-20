@@ -2860,8 +2860,8 @@ def aks_draft_up(app=None,
                      gh_repo, cluster_name, registry_name, container_name, destination)
 
 
-def aks_draft_update(host=None, cert=None):
-    aks_draft_cmd_update(host, cert)
+def aks_draft_update(host=None, certificate=None, destination=None):
+    aks_draft_cmd_update(host, certificate, destination)
 
 
 def aks_pod_identity_add(cmd, client, resource_group_name, cluster_name,

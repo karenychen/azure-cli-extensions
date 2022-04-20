@@ -108,8 +108,8 @@ def aks_draft_cmd_up(app: str,
 
 
 # `az aks draft update` function
-def aks_draft_cmd_update(host: str, cert: str) -> None:
-    file_path, arguments = _pre_run(host=host, cert=cert)
+def aks_draft_cmd_update(host: str, certificate: str, destination: str) -> None:
+    file_path, arguments = _pre_run(host=host, certificate=certificate, destination=destination)
     run_successful = _run(file_path, 'update', arguments)
     if run_successful:
         _run_finish()
