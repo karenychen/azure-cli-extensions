@@ -2842,9 +2842,10 @@ def aks_draft_generate_workflow(cluster_name=None,
                                 registry_name=None,
                                 container_name=None,
                                 resource_group=None,
-                                destination=None):
+                                destination=None,
+                                branch=None):
     aks_draft_cmd_generate_workflow(cluster_name, registry_name, container_name,
-                                    resource_group, destination)
+                                    resource_group, destination, branch)
 
 
 def aks_draft_up(app=None,
@@ -2855,9 +2856,10 @@ def aks_draft_up(app=None,
                  cluster_name=None,
                  registry_name=None,
                  container_name=None,
-                 destination=None):
-    aks_draft_cmd_up(app, subscription_id, resource_group, provider,
-                     gh_repo, cluster_name, registry_name, container_name, destination)
+                 destination=None,
+                 branch=None):
+    aks_draft_cmd_up(app, subscription_id, resource_group, provider,  gh_repo,
+                     cluster_name, registry_name, container_name, destination, branch)
 
 
 def aks_draft_update(host=None, certificate=None, destination=None):

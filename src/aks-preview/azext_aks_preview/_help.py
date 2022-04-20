@@ -1696,6 +1696,9 @@ helps['aks draft generate-workflow'] = """
         - name: --container-name
           type: string
           short-summary: Specify the name of the container image.
+        - name: --branch
+          type: string
+          short-summary: Specify the Github branch to automatically deploy from.
 """
 
 helps['aks draft up'] = """
@@ -1732,6 +1735,9 @@ helps['aks draft up'] = """
         - name: --destination
           type: string
           short-summary: Specify the path to the project directory (default is .).
+        - name: --branch
+          type: string
+          short-summary: Specify the Github branch to automatically deploy from.
 """
 
 helps['aks draft update'] = """

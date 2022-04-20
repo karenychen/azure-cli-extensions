@@ -58,12 +58,14 @@ def aks_draft_cmd_generate_workflow(cluster_name: str,
                                     registry_name: str,
                                     container_name: str,
                                     resource_group: str,
-                                    destination: str) -> None:
+                                    destination: str,
+                                    branch: str) -> None:
     file_path, arguments = _pre_run(cluster_name=cluster_name,
                                     registry_name=registry_name,
                                     container_name=container_name,
                                     resource_group=resource_group,
-                                    destination=destination)
+                                    destination=destination,
+                                    branch=branch)
     run_successful = _run(file_path, 'generate-workflow', arguments)
     if run_successful:
         _run_finish()
@@ -80,7 +82,8 @@ def aks_draft_cmd_up(app: str,
                      cluster_name: str,
                      registry_name: str,
                      container_name: str,
-                     destination: str) -> None:
+                     destination: str,
+                     branch: str) -> None:
     file_path = _binary_pre_check()
     if not file_path:
         raise ValueError('Binary check was NOT executed successfully')
@@ -99,7 +102,8 @@ def aks_draft_cmd_up(app: str,
                                          registry_name=registry_name,
                                          container_name=container_name,
                                          resource_group=resource_group,
-                                         destination=destination)
+                                         destination=destination,
+                                         branch=branch)
     run_successful = _run(file_path, 'generate-workflow', generate_workflow_args)
     if run_successful:
         _run_finish()
