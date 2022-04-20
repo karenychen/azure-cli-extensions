@@ -43,7 +43,7 @@ def aks_draft_cmd_setup_gh(app: str,
                            gh_repo: str) -> None:
     file_path, arguments = _pre_run(app=app,
                                     subscription_id=subscription_id,
-                                    resource_group_name=resource_group,
+                                    resource_group=resource_group,
                                     provider=provider,
                                     gh_repo=gh_repo)
     run_successful = _run(file_path, 'setup-gh', arguments)
@@ -90,7 +90,7 @@ def aks_draft_cmd_up(app: str,
 
     setup_gh_args = _build_args(app=app,
                                 subscription_id=subscription_id,
-                                resource_group_name=resource_group,
+                                resource_group=resource_group,
                                 provider=provider,
                                 gh_repo=gh_repo)
 
