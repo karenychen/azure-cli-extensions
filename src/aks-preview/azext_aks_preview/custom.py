@@ -2833,7 +2833,7 @@ def aks_draft_create(destination='.',
 def aks_draft_setup_gh(app=None,
                        subscription_id=None,
                        resource_group=None,
-                       provider=None,
+                       provider="azure",
                        gh_repo=None):
     aks_draft_cmd_setup_gh(app, subscription_id, resource_group, provider, gh_repo)
 
@@ -2851,7 +2851,7 @@ def aks_draft_generate_workflow(cluster_name=None,
 def aks_draft_up(app=None,
                  subscription_id=None,
                  resource_group=None,
-                 provider=None,
+                 provider="azure",
                  gh_repo=None,
                  cluster_name=None,
                  registry_name=None,
