@@ -2843,7 +2843,7 @@ def aks_draft_generate_workflow(cluster_name=None,
                                 container_name=None,
                                 resource_group=None,
                                 destination=None,
-                                branch="main"):
+                                branch=None):
     aks_draft_cmd_generate_workflow(cluster_name, registry_name, container_name,
                                     resource_group, destination, branch)
 
@@ -2857,7 +2857,7 @@ def aks_draft_up(app=None,
                  registry_name=None,
                  container_name=None,
                  destination=None,
-                 branch="main"):
+                 branch=None):
     aks_draft_cmd_up(app, subscription_id, resource_group, provider,  gh_repo,
                      cluster_name, registry_name, container_name, destination, branch)
 
